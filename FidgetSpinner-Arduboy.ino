@@ -1,4 +1,6 @@
 #include <Arduboy2.h>
+#include <ArduboyTones.h>
+#include <ArduboyTonesPitches.h>
 #include "globals.h"
 #include "assets.h"
 #include "spinner.h"

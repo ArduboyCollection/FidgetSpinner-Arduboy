@@ -4,12 +4,15 @@
 #include <Arduboy2.h>
 #include "assets.h"
 #include "globals.h"
+#include "sounds.h"
 
 #define SPINNER_SPRITE_OFFSET_X 15 // The x offset (center) of the spinner sprite
 #define SPINNER_SPRITE_OFFSET_Y 14 // The y offset (center) of the spinner sprite
 #define SPINNER_SPRITE_VARIANTS 3 // The number of spinner designs (sprites)
 #define SPINNER_DIRECTION_CLOCKWISE 0 // The spinner rotates clockwise
 #define SPINNER_DIRECTION_COUNTER_CLOCKWISE 1 // The spinner rotates counter-clockwise
+#define SPINNER_MAX_SPEED (FRAMERATE - 1) // The maximum speed of the spinner
+#define SPINNER_SPEED_PERCENTAGE max(((spinner.speed - 50) * 100) / (SPINNER_MAX_SPEED - 50), 0)
 
 struct Spinner
 {
@@ -33,7 +36,7 @@ const unsigned char *SPINNER_SPRITES[] {
 // Spins the spinner in the given direction.
 void spinner_spin(byte direction) {
   spinner.direction = direction;
-  spinner.speed = FRAMERATE - 1;
+  spinner.speed = SPINNER_MAX_SPEED;
 }
 
 // Changes the sprite/design/variant of the spinner to the previous one
@@ -110,6 +113,9 @@ void spinner_loop() {
           (--spinner.frame) % 4;
     }
   }
+
+  // Play/update/stop the spinning sound
+  sounds_playSpinSound(SPINNER_SPEED_PERCENTAGE);
 }
 
 // Drawing event
